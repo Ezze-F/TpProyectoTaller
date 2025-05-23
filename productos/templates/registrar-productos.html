@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo producto</title>
+</head>
+<body>
+    <header>
+        <h1>REGISTRO DE UN NUEVO PRODUCTO</h1>
+    </header>
+    <form method="POST"> <!-- Se utiliza el método POST para el envío de los datos del forrmulario -->
+        {% csrf_token %} <!-- Se utiliza el token de seguridad -->
+        {{ registrar.as_p }} <!-- Se muestran todos los campos del formulario con el método as_p sobre la variable registrar (debe ser la misma que en la view) -->
+        <button type="submit">Agregar producto</button> <!-- Generamos un botón para el envío de los datos -->
+    </form>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de productos</title>
+</head>
+<body>
+    <header>
+        <h1>LISTADO DE LOS PRODUCTOS CARGADOS</h1>
+    </header>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Precio Unitario</th>
+                    <th>Marca</th>
+                    <th>Cantidad</th>
+                    <th>Fec. de Elab.</th>
+                    <th>Fec. de Venc.</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            {% for p in listado %} <!-- la variable productos debe coincidir con la variable en el views -->
+                <tr>
+                    <td>{{p.codigo}}</td>
+                    <td>{{p.preciounitario}}</td>
+                    <td>{{p.marca}}</td>
+                    <td>{{p.cantidad}}</td>
+                    <td>{{p.fechaelaboracion}}</td>
+                    <td>{{p.fechavencimiento}}</td>
+                    <td>{{p.descripcion}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+</body>
+</html>
