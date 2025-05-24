@@ -9,10 +9,18 @@
     <header>
         <h1>REGISTRO DE UN NUEVO PRODUCTO</h1>
     </header>
-    <form method="POST"> <!-- Se utiliza el método POST para el envío de los datos del forrmulario -->
-        {% csrf_token %} <!-- Se utiliza el token de seguridad -->
-        {{ registrar.as_p }} <!-- Se muestran todos los campos del formulario con el método as_p sobre la variable registrar (debe ser la misma que en la view) -->
-        <button type="submit">Agregar producto</button> <!-- Generamos un botón para el envío de los datos -->
-    </form>
+    <nav>
+        <ul>
+            <li><a href="{% url 'listar_prod' %}">Mostrar productos</a></li> <!-- Se hace el vínculo con el html de nombre listar_prod -->
+            <li><a href="{% url 'registrar_prod' %}">Agregar un producto</a></li> <!-- Se hace el vínculo con el html de nombre listar_prod -->
+        </ul>
+    </nav>
+    <div>
+        <form method="POST"> <!-- Se utiliza el método POST para el envío de los datos del forrmulario -->
+            {% csrf_token %} <!-- Se utiliza el token de seguridad -->
+            {{ registrar.as_p }} <!-- Se muestran todos los campos del formulario con el método as_p sobre la variable registrar (debe ser la misma que en la view) -->
+            <button type="submit">Agregar producto</button> <!-- Generamos un botón para el envío de los datos -->
+        </form>
+    </div>
 </body>
 </html>

@@ -9,6 +9,13 @@
     <header>
         <h1>LISTADO DE LOS PRODUCTOS CARGADOS</h1>
     </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'listar_prod' %}">Mostrar productos</a></li> <!-- Se hace el vínculo con el html de nombre listar_prod -->
+            <li><a href="{% url 'registrar_prod' %}">Agregar un producto</a></li> <!-- Se hace el vínculo con el html de nombre listar_prod -->
+        </ul>
+    </nav>
+    <div>
         <table>
             <thead>
                 <tr>
@@ -30,9 +37,16 @@
                     <td>{{p.fechaelaboracion}}</td>
                     <td>{{p.fechavencimiento}}</td>
                     <td>{{p.descripcion}}</td>
+                    <td><a href="{% url 'modificar_prod' p.pk %}">Editar</a></td> <!-- se referencia al nombre modificar_prod en urls.py -->
+                    <td><a href="{% url 'eliminar_prod' p.pk %}">Eliminar</a></td> <!-- se referencia al nombre eliminar_prod en urls.py -->
+                    <!--<td>
+                        <form action="{% url 'eliminar_prod' p.pk %}" method="post" style="display:inline;"> <!-- Borrado seguro con el método POST -->
+                    <!--        {% csrf_token %} <button type="submit" onclick="return confirm('¿Confirma eliminar este producto?');">Eliminar</button>
+                        </form>
+                    </td>-->
                 </tr>
             {% endfor %}
         </table>
-
+    </div>
 </body>
 </html>
