@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de productos</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="bg-light">
+    <div class="portada3">
+        <img src="{% static 'images/banner.png' %}" class="img-fluid" alt="portada">
+    </div>
+    <header>
+        <div class="titulom">
+            <h1>LISTADO DE LOS PRODUCTOS CARGADOS</h1>
+        </div>
+    </header>
+    <nav class="navbar navbar-expand-sm paginasm">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center fs-5" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item ms-3 me-3 enlacesm">
+                        <a class="nav-link active" aria-current="page" href="{% url 'inicio' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item ms-3 me-3 enlacesm">
+                        <a class="nav-link active" aria-current="page" href="{% url 'registrar_prod' %}">Registrar</a>
+                    </li>
+                    <li class="nav-item ms-3 me-3 enlacesm">
+                        <a class="nav-link active" href="{% url 'modificar_prod' %}">Modificar</a>
+                    </li>
+                    <li class="nav-item ms-3 me-3 enlacesm">
+                        <a class="nav-link active" href="{% url 'listar_prod' %}">Mostrar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Precio Unitario</th>
+                    <th>Marca</th>
+                    <th>Cantidad</th>
+                    <th>Fec. de Elab.</th>
+                    <th>Fec. de Venc.</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            {% for p in listado %} <!-- la variable productos debe coincidir con la variable en el views -->
+                <tr>
+                    <td>{{p.codigo}}</td>
+                    <td>{{p.preciounitario}}</td>
+                    <td>{{p.marca}}</td>
+                    <td>{{p.cantidad}}</td>
+                    <td>{{p.fechaelaboracion}}</td>
+                    <td>{{p.fechavencimiento}}</td>
+                    <td>{{p.descripcion}}</td>
+                    <td><a href="{% url 'modificar_prod' p.pk %}">Editar</a></td> <!-- se referencia al nombre modificar_prod en urls.py -->
+                    <td><a href="{% url 'eliminar_prod' p.pk %}">Eliminar</a></td> <!-- se referencia al nombre eliminar_prod en urls.py -->
+                    <!--<td>
+                        <form action="{% url 'eliminar_prod' p.pk %}" method="post" style="display:inline;"> <!-- Borrado seguro con el método POST -->
+                    <!--        {% csrf_token %} <button type="submit" onclick="return confirm('¿Confirma eliminar este producto?');">Eliminar</button>
+                        </form>
+                    </td>-->
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+</body>
+</html>
