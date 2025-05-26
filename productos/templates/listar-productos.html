@@ -1,19 +1,41 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de productos</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<body>
+<body class="bg-light">
+    <div class="portada3">
+        <img src="{% static 'banner.png' %}" class="img-fluid" alt="portada">
+    </div>
     <header>
-        <h1>LISTADO DE LOS PRODUCTOS CARGADOS</h1>
+        <div class="titulom">
+            <h1>LISTADO DE LOS PRODUCTOS CARGADOS</h1>
+        </div>
     </header>
-    <nav>
-        <ul>
-            <li><a href="{% url 'listar_prod' %}">Mostrar productos</a></li> <!-- Se hace el vínculo con el html de nombre listar_prod -->
-            <li><a href="{% url 'registrar_prod' %}">Agregar un producto</a></li> <!-- Se hace el vínculo con el html de nombre listar_prod -->
-        </ul>
+    <nav class="navbar navbar-expand-sm paginasm">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center fs-5" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item ms-3 me-3 enlacesm">
+                        <a class="nav-link active" aria-current="page" href="{% url 'inicio' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item ms-3 me-3 enlacesm">
+                        <a class="nav-link active" aria-current="page" href="{% url 'registrar_prod' %}">Registrar</a>
+                    </li>
+                    <li class="nav-item ms-3 me-3 enlacesm">
+                        <a class="nav-link active" href="{% url 'listar_prod' %}">Mostrar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div>
         <table>
@@ -48,5 +70,6 @@
             {% endfor %}
         </table>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

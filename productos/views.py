@@ -6,6 +6,8 @@ from .forms import ProductForm # se importa el formulario ProductForm para gener
 # Create your views here.
 
 # Este CRUD utiliza el models.py de esta app (productos)
+def index(request):
+    return render(request, 'index.html')
 
 def listar_productos(request): # request quiere decir solicitado
     producto = Productos.objects.all() # la variable (objeto, en este casp) producto recibe todos los atributos que tiene la clase Productos del models.py de la app porductos
