@@ -40,6 +40,7 @@
             </div>
         </div>
     </nav>
+    <br>
     <div>
         <table id="tabla">
             <thead>
@@ -64,15 +65,20 @@
                         <td>{{p.fechaelaboracion}}</td>
                         <td>{{p.fechavencimiento}}</td>
                         <td>{{p.descripcion}}</td>
-                        <td><a href="{% url 'modificar_prod' p.pk %}">Editar</a> <!-- se referencia al nombre modificar_prod en urls.py -->
-                        <a href="{% url 'eliminar_prod' p.pk %}">Eliminar</a></td> <!-- se referencia al nombre eliminar_prod en urls.py -->
+                        <td>
+                            <div class="editar">
+                                <a href="{% url 'modificar_prod' p.pk %}">Editar</a> <!-- se referencia al nombre modificar_prod en urls.py -->
+                            </div>
+                            <div class="eliminar"role="alert">
+                                <a href="{% url 'eliminar_prod' p.pk %}">Eliminar</a>
+                            </div>
+                        </td> <!-- se referencia al nombre eliminar_prod en urls.py -->
                         <!--<td>
                             <form action="{% url 'eliminar_prod' p.pk %}" method="post" style="display:inline;"> <!-- Borrado seguro con el método POST -->
                         <!--        {% csrf_token %} <button type="submit" onclick="return confirm('¿Confirma eliminar este producto?');">Eliminar</button>
                             </form>
                         </td>-->
                     </tr>
-                
                 {% endfor %}
             </tbody>
         </table>

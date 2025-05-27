@@ -89,3 +89,46 @@ footer{
 .paginasm{
     background-color: grey;
 }
+
+a{
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+.editar{
+    background-color: rgb(42, 103, 235);
+    padding: 2px 2px;
+    border-radius: 8px;
+    margin: 1px;
+    border: 2px solid rgb(25, 0, 255);
+}
+.eliminar{
+    background-color: #f44336;
+    padding: 2px 2px;
+    border-radius: 8px;
+    margin: 1px;
+    border: 2px solid rgb(255, 0, 0);
+}
+
+.editar:hover{
+    color: white;
+    background-color: rgb(16, 3, 133);
+    transition: background-color 0.3s linear;
+}
+.eliminar:hover{
+    color: white;
+    background-color: rgb(134, 4, 4);
+    transition: background-color 0.3s linear;
+}
+#tabla {
+    border-collapse: collapse;
+}
+
+#tabla tbody tr td {
+border-bottom: 1px solid #000000;
+}
+
+
+
