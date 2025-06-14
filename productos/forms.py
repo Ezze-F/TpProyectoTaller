@@ -1,13 +1,21 @@
-from django import forms # importamos la librería forms para poder utilizarla
-from productos.models import *
+from django import forms
+from .models import Productos
 
-
-class ProductForm(forms.ModelForm): # se crea la clase ProductForm utilizando ModelForm de la librería forms
+class ProductForm(forms.ModelForm):
     class Meta:
-        model = Productos # el objeto model va a ser del tipo Productos (entidad que pertenece a models.py)
-        fields = "__all__" # se van a utilizar todos los campos
-        exclude = ['codigo'] # excluye al campo codigo al momento de registrar un nuevo producto ya que será autoincremental (configuración realizada en Workbench)
+        model = Productos
+        # Incluye todos los campos excepto los que no deberían ser editables manualmente
+        exclude = ['codigo', 'is_deleted', 'deleted_at']  # ← añadimos los campos internos
+
         widgets = {
-            'fechaelaboracion': forms.DateInput(attrs={'type': 'date'}), # genera un input date (calendario) para el registro de un nuevo producto
-            'fechavencimiento': forms.DateInput(attrs={'type': 'date'}), # genera un input date (calendario) para el registro de un nuevo producto
+            'fechaelaboracion': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'}
+            ),
+            'fechavencimiento': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'}
+            ),
+            'marca': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+            'preciounitario': forms.NumberInput(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
         }

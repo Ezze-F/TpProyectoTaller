@@ -1,3 +1,28 @@
+{% extends 'base_index.html' %} <!-- Extiende desde base_index.html -->
+{% load static %}
+
+{% block title %}Proyecto Bover{% endblock %}
+
+{% block content %}
+    <div class="titulo">
+        <h1>BIENVENIDOS A LA PAGINA DE PRODUCTOS</h1>
+    </div>
+    <div class="imagen">
+        <img src="{% static 'pagina.jpg' %}" class="rounded mx-auto d-block" style="width: 20%; height: auto;" alt="imagen">
+    </div>
+    <br>
+    <div class="texto">
+        <div class="col-12">
+            <p>En Bover, tu tienda online tiene todo lo que necesitás para gestionar tu inventario de manera simple y eficiente. Desde esta plataforma podés crear nuevos productos, modificarlos cuando sea necesario y visualizar la lista completa de productos disponibles en tu tienda.</p>
+            <p>Nuestra herramienta está diseñada para que mantengas toda la información actualizada, controlando fácilmente el stock, precios y detalles de cada artículo. Así, podés enfocarte en hacer crecer tu negocio mientras Bover se encarga de la administración de productos.</p>
+            <p>¡Comenzá a gestionar tu tienda ahora y optimizá tu tiempo con Bover!</p>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+<!--
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +37,6 @@
     <div class="portada">
         <img src="{% static 'banner.png' %}" class="img-fluid" alt="portada">
     </div>
-
     <nav class="navbar navbar-expand-sm paginas">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,3 +83,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>
+-->
