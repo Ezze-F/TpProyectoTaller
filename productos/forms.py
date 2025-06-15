@@ -5,7 +5,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Productos
         # Incluye todos los campos excepto los que no deberían ser editables manualmente
-        exclude = ['codigo', 'is_deleted', 'deleted_at']  # ← añadimos los campos internos
+        exclude = ['codigo', 'is_deleted', 'deleted_at']  # Compos excluidos
 
         widgets = {
             'fechaelaboracion': forms.DateInput(

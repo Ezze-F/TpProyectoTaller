@@ -25,6 +25,7 @@ $(document).ready(function() {
         },
         responsive: true,
         dom: '<"top"lf>rt<"bottom"ip><"clear">',
+        order: [[0, 'desc']], // para ordenar según el atributo "codigo" pero descendenetemente
         columnDefs: [
             { 
                 targets: [7], // Índice de columna de Acciones, ajusta si cambia la tabla
