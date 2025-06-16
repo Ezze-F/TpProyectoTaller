@@ -1,12 +1,11 @@
-from django import forms
+from django import forms # importamos la librería forms para poder utilizarla
 from .models import Productos
 
 class ProductForm(forms.ModelForm):
     class Meta:
-        model = Productos
-        # Incluye todos los campos excepto los que no deberían ser editables manualmente
-        exclude = ['codigo', 'is_deleted', 'deleted_at']  # Compos excluidos
-
+        model = Productos # el objeto model va a ser del tipo Productos (entidad que pertenece a models.py)
+        fields = "__all__" # se van a utilizar todos los campos
+        exclude = ['codigo', 'is_deleted', 'deleted_at']  # campos excluidos
         widgets = {
             'fechaelaboracion': forms.DateInput(
                 attrs={'type': 'date', 'class': 'form-control'}
