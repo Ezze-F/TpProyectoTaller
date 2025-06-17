@@ -13,7 +13,7 @@
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
-                {{ modificar.as_p }}
+                {{ form.as_p }}
                 <button type="submit" class="btn btn-warning mt-3">Editar producto</button>
                 <a href="{% url 'listar_prod' %}" class="btn btn-secondary mt-3 ms-2">Cancelar</a>
             </form>

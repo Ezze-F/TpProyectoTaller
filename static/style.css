@@ -130,5 +130,8 @@ a{
 border-bottom: 1px solid #000000;
 }
 
-
-
+#btnNuevoProducto {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
