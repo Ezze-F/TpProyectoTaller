@@ -65,7 +65,7 @@
                                 <td>${{ p.preciounitario }}</td>
                                 <td>{{ p.marca }}</td>
                                 <td>{{ p.cantidad }}</td>
-                                <td>{{ p.fechaelaboracion }}</td>
+                                <td>{{ p.fechaelaboracion|default_if_none:"N/A" }}</td>
                                 <td>{{ p.fechavencimiento|default_if_none:"N/A" }}</td>
                                 <td>{{ p.descripcion|default_if_none:"Sin descripción" }}</td>
                                 <td>
@@ -112,7 +112,7 @@
                                     <td>${{ p.preciounitario }}</td>
                                     <td>{{ p.marca }}</td>
                                     <td>{{ p.cantidad }}</td>
-                                    <td>{{ p.fechaelaboracion }}</td>
+                                    <td>{{ p.fechaelaboracion|default_if_none:"N/A" }}</td>
                                     <td>{{ p.fechavencimiento|default_if_none:"N/A" }}</td>
                                     <td>{{ p.descripcion|default_if_none:"Sin descripción" }}</td>
                                     <td>{{ p.deleted_at|date:"Y-m-d H:i" }}</td>
@@ -136,7 +136,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarProductoLabel">Editar Producto</h5>
+                <h5 class="modal-title" id="modalEditarProductoLabel">Modificar producto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
@@ -154,7 +154,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEliminarProductoLabel">Eliminar Producto</h5>
+                <h5 class="modal-title" id="modalEliminarProductoLabel">Borrar producto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
@@ -171,7 +171,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Nuevo Producto</h5>
+                <h5 class="modal-title">Ingreso de un nuevo producto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body" id="formularioCrearProducto">
@@ -186,7 +186,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalRestaurarProductoLabel">Restaurar Producto</h5>
+                <h5 class="modal-title" id="modalRestaurarProductoLabel">Reestablecer producto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body" id="formularioRestaurarProducto">
@@ -204,54 +204,55 @@
 <script src="{% static 'tabla.js' %}"></script>
 
 <script>
-$(document).ready(function () {
-    $('#tabla_disponibles').DataTable();
-    $('#tabla_eliminados').DataTable();
+$(document).ready(function () { // función jQuery
+    $('#tabla_disponibles').DataTable(); // selecciona el elemento con id tabla_disponibles usando jQuery para transformar una tabla normal en DataTable
+    $('#tabla_eliminados').DataTable(); // selecciona el elemento con id tabla_eliminados usando jQuery para transformar una tabla normal en DataTable
 
     // Al hacer clic en el botón Editar
-    $('.btnEditar').on('click', function() {
-        var url = $(this).data('url');
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function(data) {
-                $('#formularioEditarProducto').html(data); // carga el formulario en el modal
-                $('#modalEditarProducto').modal('show');
-            },
-            error: function(xhr, status, error) {
-                alert('Error al cargar el formulario.');
-            }
-        });
-    });
+    $('.btnEditar').on('click', function() { // $('.btnEliminar') selecciona todos los elementos HTML que tienen la clase btnEliminar. Luego .on('click', function (){... establece un manejador de evento que se ejecutará cuando se haga click en cualquiera de esos elementos. 
+        var url = $(this).data('url'); // $(this) hace referencia al botón que fue cliqueado, y .data('url') obtiene el atributo data-url del botón
+        $.ajax({ // se inicia una petición AJAX con jQuery
+            url: url, // se utiliza la url obtenida del atributo data-url
+            type: 'GET', // método de solicitud HTTP  
+            // si la solicitud AJAX fue exitosa...
+            success: function(data) { // data contiene contenido HTML devuelto por el servidor
+                $('#formularioEditarProducto').html(data); // se carga contenido HTML que contiene data en #formularioEditarProducto
+                $('#modalEditarProducto').modal('show'); // se muestran los datos para la edición en un modal
+            }, // cierre success
+            // si la solicitud AJAX falla...
+            error: function(xhr, status, error) { // si la url está mal escrita o el servidor no responde
+                alert('Error al cargar el formulario.'); // muestra un mensaje alert al usuario
+            } // cierre error
+        }); // cierre AJAX
+    }); // cierre de la función del evento 'click'
 
     // Para enviar el formulario por AJAX
-    $('#formularioEditarProducto').on('submit', 'form', function(e) {
-        e.preventDefault();
-
-        var form = $(this);
-        var url = form.attr('action');
-        var data = form.serialize();
-
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: data,
-            success: function(response) {
-                if (response.success) {
-                    $('#modalEditarProducto').modal('hide');
-                    location.reload(); // Opcional: recarga la página para reflejar cambios
+    $('#formularioEditarProducto').on('submit', 'form', function(e) { // se selecciona el contenedor con id formularioEditarProducto para establecer lo que se hace (function(e), siendo e un evento) cuando se envían ('submit') datos de un formulario ('form')
+        e.preventDefault(); // para enviar de forma asincrónica
+        var form = $(this); // se guarda una referencia al formulario enviado
+        var url = form.attr('action'); // se guarda en url la URL definida en el atributo action del formular, que establece a dónde se debe enviar la información
+        var data = form.serialize(); // convierte todos los campos del formulario en una cadena de texte. Ej: "nombre=Juan&&edad=20"
+        $.ajax({ // inicio de una solicitud AJAX
+            url: url, // url del formulario
+            type: 'POST', // método de envío de datos HTTP
+            data: data, // cadena de caracteres
+            // si la solicitud AJAX fue exitosa...
+            success: function(response) {  
+                if (response.success) { // se espera una respuesta en formato JSON por parte del servidor
+                    $('#modalEditarProducto').modal('hide'); // se oculta el modal
+                    location.reload(); // para recargar la página y reflejar cambios
                 } else {
-                    alert('Corrige los errores en el formulario.');
+                    alert('Corrige los errores en el formulario.'); // genera un alert con el mensaje 'Corrige los errores en el formulario.'
                 }
-            },
+            }, // cierre success
+            // si la solicitud AJAX fue errónea...
             error: function() {
-                alert('Error al enviar el formulario.');
+                alert('Error al enviar el formulario.'); // muestra un mensaje alert al usuario
             }
-        });
-    });
+        }); // cierre AJAX
+    }); // cierre de la función del evento 'submit'
 
-    // Abrir modal de eliminación lógica
+    // Al hacer clic en el botón Eliminar
     $('.btnEliminar').on('click', function () {
         const url = $(this).data('url');
 
@@ -294,7 +295,7 @@ $(document).ready(function () {
         });
     });
 
-    // Abrir el modal y cargar el formulario
+    // Al hacer clic en el botón Nuevo producto
     $('#btnNuevoProducto').on('click', function() {
         $.ajax({
             url: "{% url 'registrar_prod' %}",
@@ -339,7 +340,7 @@ $(document).ready(function () {
         });
     });
 
-    // Abrir modal de restauración
+    // Al hacer clic en el botón Restaurar
     $('.btnRestaurar').on('click', function () {
         const url = $(this).data('url');
 
