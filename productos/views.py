@@ -3,10 +3,6 @@ from productos.models import Productos
 from .forms import ProductForm
 from django.http import JsonResponse # necesario para trabajar con AJAX
 
-def index(request):
-    # Vista principal
-    return render(request, 'index.html')
-
 def listar_productos(request): # request quiere decir solicitado
     # Muestra la lista de productos disponibles y eliminados.
     productos_disponibles = Productos.objects.all() # el objeto productos_disponibles recibe todos los atributos que tiene la clase Productos del models.py de la app productos excluyendo los eliminados lógicamente.
