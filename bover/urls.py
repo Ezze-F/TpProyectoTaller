@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from productos.views import index
+from usuarios import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='inicio'),
-    path('productos/', include('productos.urls')) # productos/ ruta donde se van a mostrar los html de la app productos.
+    path('productos/', include('productos.urls')), # productos/ ruta donde se van a mostrar los html de la app productos.
+    path('login/', include('usuarios.urls')),
 ]

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from productos.models import Productos
 from .forms import ProductForm
-from django.http import JsonResponse # necesario para trabajar con AJAX
 
 def index(request):
     # Vista principal
@@ -23,87 +22,41 @@ def registrar_producto(request):
         form = ProductForm(request.POST) # se guardan los datos enviados con el método POST en el objeto form
         if form.is_valid(): # si los datos recibidos son válidos...
             form.save() # se guardan los datos
-            return JsonResponse({'success': True}) # respuesta afirmativa
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors}) # respuesta negativa
+            # Se podría agregar el mensaje: messages.success(request, 'Producto registrado correctamente.')
+            return redirect('listar_prod') # se redirecciona a listar_prod (nombre de la urls)
     else: # no se utilizó el método POST (sino GET)
         form = ProductForm() # el objeto form recibe el formulario ProductForm vacío
-        return render(request, 'productos/registrar_producto_modal.html', {'form': form}) # 'form' es la variable donde se cargarán los datos del formulario (debe coincidir en el html).
-
-# Funcionalidad registrar_producto con redireccionamiento a otro html
-# def registrar_producto(request):
-#     # Registra un nuevo producto.
-#     if (request.method == 'POST'): # se verifica la utilización del método POST para los datos enviados.
-#         form = ProductForm(request.POST) # se guardan los datos enviados con el método POST en el objeto form
-#         if form.is_valid(): # si los datos recibidos son válidos...
-#             form.save() # se guardan los datos
-#             # Se podría agregar el mensaje: messages.success(request, 'Producto registrado correctamente.')
-#             return redirect('listar_prod') # se redirecciona a listar_prod (nombre de la urls)
-#     else: # no se utilizó el método POST (sino GET)
-#         form = ProductForm() # el objeto form recibe el formulario ProductForm vacío
-#     return render(request, 'productos/registrar_producto.html', {'form': form}) # 'form' es la variable donde se cargarán los datos del formulario (debe coincidir en el html).
+    return render(request, 'productos/registrar_producto.html', {'form': form}) # 'form' es la variable donde se cargarán los datos del formulario (debe coincidir en el html).
 
 def modificar_producto(request, pk): # pk será el valor a buscar para la modificación del registro
-    # Funcionalidad con AJAX. Modifica un producto existente, incluyendo eliminados.
+    # Modifica un producto existente, incluyendo eliminados.
     producto = get_object_or_404(Productos.all_objects, pk=pk) # si no se encuentra el producto, se lanza una página con el error 404
     if (request.method == 'POST'): # se verifica la utilización del método POST para los datos enviados
         form = ProductForm(request.POST, instance=producto) # si se usa POST, se guarda en la variable instance lo que contenga producto
         if form.is_valid(): # si los datos recibidos son válidos...
             form.save() # se guardan los datos
-            return JsonResponse({'success': True}) # respuesta afirmativa
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors}) # respuesta negativa
+            # Se podría agregar el mensaje: messages.success(request, 'Producto modificado correctamente.')
+            return redirect('listar_prod') # se redirecciona a listar_prod (nombre de la urls)
     else: # no se utilizó el método POST (sino GET)
         form = ProductForm(instance=producto) # se carga el formulario con los datos encontrados
-        template = 'productos/modificar_producto_modal.html' if request.headers.get('x-requested-with') == 'XMLHttpRequest' else 'productos/modificar_producto.html'
-        return render(request, template, {'form': form})
-
-# Funcionalidad modificar_producto con redireccionamiento a otro html
-# def modificar_producto(request, pk): # pk será el valor a buscar para la modificación del registro
-#     # Modifica un producto existente, incluyendo eliminados.
-#     producto = get_object_or_404(Productos.all_objects, pk=pk) # si no se encuentra el producto, se lanza una página con el error 404
-#     if (request.method == 'POST'): # se verifica la utilización del método POST para los datos enviados
-#         form = ProductForm(request.POST, instance=producto) # si se usa POST, se guarda en la variable instance lo que contenga producto
-#         if form.is_valid(): # si los datos recibidos son válidos...
-#             form.save() # se guardan los datos
-#             # Se podría agregar el mensaje: messages.success(request, 'Producto modificado correctamente.')
-#             return redirect('listar_prod') # se redirecciona a listar_prod (nombre de la urls)
-#     else: # no se utilizó el método POST (sino GET)
-#         form = ProductForm(instance=producto) # se carga el formulario con los datos encontrados
-#     return render(request, 'productos/modificar_producto.html', {'form': form}) # 'form'' es la variable donde se cargarán los datos del formulario (debe coincidir en el html).
+    return render(request, 'productos/modificar_producto.html', {'form': form}) # 'form'' es la variable donde se cargarán los datos del formulario (debe coincidir en el html).
 
 def eliminar_producto(request, pk): # pk será el valor a buscar para la eliminación del registro
     # Elimina lógicamente un producto.
     producto = get_object_or_404(Productos.all_objects, pk=pk) # si no se encuentra el producto, se lanza una página con el error 404
     if (request.method == 'POST'): # se verifica la utilización del método POST para los datos enviados
         producto.soft_delete() # se utiliza el método sof_delete() para borrar lógicamente el registro
-        return JsonResponse({'success': True}) # redirecciona al listar_productos.html (Aquí se podría mostrar un mensaje de eliminación correcta)
-    return render(request, 'productos/eliminar_producto_modal.html', {'producto': producto})
-
-# Funcionalidad eliminar_producto con redireccionamiento a otro html
-# def eliminar_producto(request, pk): # pk será el valor a buscar para la eliminación del registro
-#     # Elimina lógicamente un producto.
-#     producto = get_object_or_404(Productos.all_objects, pk=pk) # si no se encuentra el producto, se lanza una página con el error 404
-#     if (request.method == 'POST'): # se verifica la utilización del método POST para los datos enviados
-#         producto.soft_delete() # se utiliza el método sof_delete() para borrar lógicamente el registro
-#         # Se podría agregar el mensaje: messages.success(request, f'Producto {producto.codigo} eliminado.')
-#         return redirect('listar_prod') # redirecciona al listar_productos.html (Aquí se podría mostrar un mensaje de eliminación correcta)
-#     return redirect('listar_prod') # redirecciona al listar_productos.html 
+        # Se podría agregar el mensaje: messages.success(request, f'Producto {producto.codigo} eliminado.')
+        return redirect('listar_prod') # redirecciona al listar_productos.html (Aquí se podría mostrar un mensaje de eliminación correcta)
+    return redirect('listar_prod') # redirecciona al listar_productos.html 
 
 def restaurar_producto(request, pk): # pk será el valor a buscar para la eliminación del registro
     # Restaura un producto eliminado lógicamente.
     producto = get_object_or_404(Productos.all_objects, pk=pk) # si no se encuentra el producto, se lanza una página con el error 404
     if request.method == 'POST': # se verifica la utilización del método POST para los datos enviados
         producto.restore() # se utiliza el método restore() para restaurar el registro borrado lógicamente-
-        return JsonResponse({'success': True})
-    return render(request, 'productos/restaurar_producto_modal.html', {'producto': producto}) 
+        # Se podría agregar el mensaje: messages.success(request, f'Producto {producto.codigo} restaurado.')
+        return redirect('listar_prod') # redirecciona al listar_productos.html (Aquí se podría mostrar un mensaje de restauración correcta)
+    return redirect('listar_prod') # redirecciona al listar_productos.html 
 
-# Funcionalidad restaurar_producto con redireccionamiento a otro html
-# def restaurar_producto(request, pk): # pk será el valor a buscar para la eliminación del registro
-#     # Restaura un producto eliminado lógicamente.
-#     producto = get_object_or_404(Productos.all_objects, pk=pk) # si no se encuentra el producto, se lanza una página con el error 404
-#     if request.method == 'POST': # se verifica la utilización del método POST para los datos enviados
-#         producto.restore() # se utiliza el método restore() para restaurar el registro borrado lógicamente-
-#         # Se podría agregar el mensaje: messages.success(request, f'Producto {producto.codigo} restaurado.')
-#         return redirect('listar_prod') # redirecciona al listar_productos.html (Aquí se podría mostrar un mensaje de restauración correcta)
-#     return redirect('listar_prod') # redirecciona al listar_productos.html 
+
