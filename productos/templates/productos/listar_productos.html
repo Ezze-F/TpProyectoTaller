@@ -18,7 +18,7 @@
 {% block content %}
 <header class="mb-4">
     <div class="text-center titulom">
-        <h1>Productos cargados</h1>
+        <h1>Productos</h1>
     </div>
 </header>
 
@@ -69,7 +69,7 @@
                                 <td>{{ p.fechavencimiento|default_if_none:"N/A" }}</td>
                                 <td>{{ p.descripcion|default_if_none:"Sin descripción" }}</td>
                                 <td>
-                                    <div class="d-flex flex-column gap-2">
+                                    <div class="d-flex flex-row gap-2">
                                         <!-- Botón Editar que abre modal -->
                                         <button class="btn btn-sm btn-info btnEditar" data-url="{% url 'modificar_prod' p.pk %}">
                                             Editar

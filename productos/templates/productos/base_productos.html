@@ -19,7 +19,7 @@
 
     <!-- Portada/Banner -->
     <div class="portada">
-        <img src="{% static 'banner.png' %}" class="img-fluid w-100" alt="portada">
+        <img src="{% static 'banner.png' %}" class="img-fluid" alt="portada">
     </div>
 
     <!-- Navegación principal -->
@@ -31,7 +31,7 @@
             <div class="collapse navbar-collapse justify-content-center fs-5" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item ms-3 me-3 enlaces">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}">Principal</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}">Inicio</a>
                     </li>
                     <li class="nav-item ms-3 me-3 enlaces">
                         <a class="nav-link {% if request.resolver_match.url_name == 'listar_prod' %}active{% endif %}" href="{% url 'listar_prod' %}">Productos</a>
