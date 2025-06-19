@@ -45,7 +45,7 @@ footer{
     justify-content: center;
     font-size: 10px;
     align-items: center;
-    height: 40px;
+    height: 60px;
     font-style: italic;
     font-family: 'Times New Roman', Times, serif;
     width: 100vw;
@@ -53,6 +53,7 @@ footer{
     z-index: 10;
     bottom: 0;
     padding: 1.5rem 0;
+    
 }
 
 
@@ -322,7 +323,7 @@ border-bottom: 1px solid #000000;
 
 
 #bingreso:hover{
-    background-color: rgb(66, 35, 0);
+    background-color: rgb(240, 162, 72)!important;
 }
 
 
