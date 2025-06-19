@@ -34,9 +34,13 @@ footer{
     justify-content: center;
     font-size: 10px;
     align-items: center;
-    height: 40px;
+    height: auto;
     font-style: italic;
     font-family: 'Times New Roman', Times, serif;
+}
+.enlaces{
+    display: flex;
+    justify-content: center;
 }
 .enlaces a.nav-link:hover {
     color: white;
@@ -44,6 +48,8 @@ footer{
     border: 1px solid rgb(119, 66, 22);
     border-radius: 20%;
     transition: background-color 0.5s linear;
+    justify-content: center;
+
 }
 
 .paginasr{
@@ -67,7 +73,10 @@ footer{
     border-radius: 20%;
     transition: background-color 0.5s linear;
 }
-
+.enlacesr{
+    display: flex;
+    justify-content: center;
+}
 .titulom{
     display: flex;
     justify-content: center;
@@ -92,7 +101,7 @@ footer{
 
 a{
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     color: white;
     text-decoration: none;
     font-weight: bold;
@@ -130,3 +139,40 @@ a{
 border-bottom: 1px solid #000000;
 }
 
+.usua{
+    background-image: url(inciosesion.jpg);
+}
+.usu{
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+.tit{
+    display: flex;
+    justify-content: center;
+}
+.boton{
+    display: flex;
+    background-color: rgb(124, 51, 9);
+    color: #ffffff;
+    justify-self: center;
+    border-radius: 2px solid rgb(240, 99, 18);
+}
+
+.forma{
+    background-color: rgb(224, 159, 84);
+    margin: 2%;
+    border: 2px solid rgb(0, 0, 0);
+    padding: 2px 2px;
+    border-radius: 10px;
+}
+.puto{
+    background-color: #f44336;
+    display: flex;
+    justify-content: center;
+    border: #000000;
+    border-radius: 10px;
+    padding: 5px 5px;
+}
+.inicio{
+    text-align: ;
+}

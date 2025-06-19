@@ -18,25 +18,25 @@
 <body class="bg-light">
 
     <!-- Portada/Banner -->
-    <div class="portada">
+    <div class="portada2">
         <img src="{% static 'banner.png' %}" class="img-fluid w-100" alt="portada">
     </div>
 
     <!-- Navegación principal -->
-    <nav class="navbar navbar-expand-sm paginas bg-white shadow-sm">
+    <nav class="navbar navbar-expand-sm paginasr shadow-sm">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Mostrar navegación">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center fs-5" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item ms-3 me-3 enlaces">
+                    <li class="nav-item ms-3 me-3 enlacesr">
                         <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}">Inicio</a>
                     </li>
-                    <li class="nav-item ms-3 me-3 enlaces">
+                    <li class="nav-item ms-3 me-3 enlacesr">
                         <a class="nav-link {% if request.resolver_match.url_name == 'registrar_prod' %}active{% endif %}" href="{% url 'registrar_prod' %}">Registrar</a>
                     </li>
-                    <li class="nav-item ms-3 me-3 enlaces">
+                    <li class="nav-item ms-3 me-3 enlacesr">
                         <a class="nav-link {% if request.resolver_match.url_name == 'listar_prod' %}active{% endif %}" href="{% url 'listar_prod' %}">Mostrar</a>
                     </li>
                 </ul>

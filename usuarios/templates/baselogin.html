@@ -15,25 +15,25 @@
     
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-light">
+<body class="usua">
 
     <!-- Portada/Banner -->
-    <div class="portada">
+    <div class="portada2">
         <img src="{% static 'banner.png' %}" class="img-fluid w-100" alt="portada">
     </div>
 
     <!-- Contenido de la página -->
-    <main class="container my-4">
+    <main class="container usu">
         {% block content %}
         {% endblock %}
     </main>
 
     <!-- Pie de página -->
-    <footer class="text-center py-3 bg-dark text-white">
+    <!--<footer class="inicio text-center py-3 bg-dark text-white ini">
         <div class="frase">
             <h5>Gestión eficiente de tus productos, todo en un solo lugar.</h5>
         </div>
-    </footer>
+    </footer>-->
 
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>

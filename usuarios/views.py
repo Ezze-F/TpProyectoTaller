@@ -18,7 +18,7 @@ def inicio_sesion(request):
                 # Guardar en la sesión
                 request.session['usuario_id'] = usuario.codigo
                 request.session['usuario_nombre'] = usuario.nombre
-                return redirect('listar_prod')  # o a la página que quieras
+                return redirect('inicio')  # o a la página que quieras
             except Usuarios.DoesNotExist:
                 error = "Usuario o clave incorrectos."
     else:

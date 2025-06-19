@@ -1,13 +1,17 @@
 {% extends 'baselogin.html' %}
 {% block content %}
-<h2>Iniciar sesión</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Ingresar</button>
-</form>
+<div class="forma">
+    <div class="col-12">
+        <h2>Iniciar sesión</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if error %}
+            <p>{{ error }}</p>
+            {% endif %}
+            <button type="submit" class="btn btn-primary boton">INGRESAR</button>
+            {% endblock %}
+        </form>
+    </div>
+</div>
 
-{% if error %}
-    <p>{{ error }}</p>
-{% endif %}
-{% endblock %}
