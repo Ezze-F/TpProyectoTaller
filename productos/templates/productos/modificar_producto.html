@@ -1,0 +1,23 @@
+{% load static %}
+{% extends 'productos/base_productos.html' %}
+{% load static %}
+
+{% block title %}Modificar Producto{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header text-white text-center subtitulom">
+            <h4>Modificar un producto</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-warning mt-3">Editar producto</button>
+                <a href="{% url 'listar_prod' %}" class="btn btn-secondary mt-3 ms-2">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

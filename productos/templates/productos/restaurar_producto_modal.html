@@ -1,0 +1,8 @@
+<form method="post" id="formRestaurarProducto" action="{% url 'restaurar_prod' producto.pk %}">
+    {% csrf_token %}
+    <p>¿Deseas restaurar el producto <strong>{{ producto.descripcion }}</strong>?</p>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Restaurar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>

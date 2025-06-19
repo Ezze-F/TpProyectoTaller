@@ -1,0 +1,387 @@
+{% extends 'productos/base_productos.html' %}
+{% load static %}
+
+{% block title %}Listado de productos{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables@1.10.18/media/css/jquery.dataTables.min.css">
+    <style>
+        .tab-pane .dataTables_wrapper {
+            margin-top: 20px;
+        }
+        .dataTables_wrapper .dataTables_filter input {
+            margin-left: 0.5em;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<header class="mb-4">
+    <div class="text-center titulom">
+        <h1>Productos</h1>
+    </div>
+</header>
+
+<div class="seccion-nuevo-producto">
+    <button type="button" class="btn btn-success" id="btnNuevoProducto">Nuevo producto</button>
+</div>
+
+<div class="container">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="disponibles-tab" data-bs-toggle="tab" data-bs-target="#disponibles" type="button" role="tab">
+                Productos Disponibles ({{ listado_disponibles|length }})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="eliminados-tab" data-bs-toggle="tab" data-bs-target="#eliminados" type="button" role="tab">
+                Productos Eliminados ({{ listado_eliminados|length }})
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+
+        <!-- Productos Disponibles -->
+        <div class="tab-pane fade show active" id="disponibles" role="tabpanel">
+            <div class="table-responsive">
+                <table id="tabla_disponibles" class="table table-striped table-bordered mt-3">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Código</th>
+                            <th>Precio Unitario</th>
+                            <th>Marca</th>
+                            <th>Cantidad</th>
+                            <th>Fec. Elab.</th>
+                            <th>Fec. Venc.</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in listado_disponibles %}
+                            <tr data-id="{{ p.pk }}">
+                                <td>{{ p.codigo }}</td>
+                                <td>${{ p.preciounitario }}</td>
+                                <td>{{ p.marca }}</td>
+                                <td>{{ p.cantidad }}</td>
+                                <td>{{ p.fechaelaboracion|default_if_none:"N/A" }}</td>
+                                <td>{{ p.fechavencimiento|default_if_none:"N/A" }}</td>
+                                <td>{{ p.descripcion|default_if_none:"Sin descripción" }}</td>
+                                <td>
+                                    <div class="d-flex flex-row gap-2">
+                                        <!-- Botón Editar que abre modal -->
+                                        <button class="btn btn-sm btn-info btnEditar" data-url="{% url 'modificar_prod' p.pk %}">
+                                            Editar
+                                        </button>
+
+                                        <!-- Botón Eliminar que abre modal -->
+                                        <button class="btn btn-sm btn-danger btnEliminar" data-url="{% url 'eliminar_prod' p.pk %}">
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Productos Eliminados -->
+        <div class="tab-pane fade" id="eliminados" role="tabpanel">
+            <div class="table-responsive">
+                <table id="tabla_eliminados" class="table table-striped table-bordered mt-3">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Código</th>
+                            <th>Precio Unitario</th>
+                            <th>Marca</th>
+                            <th>Cantidad</th>
+                            <th>Fec. Elab.</th>
+                            <th>Fec. Venc.</th>
+                            <th>Descripción</th>
+                            <th>Fec. Eliminación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in listado_eliminados %}
+                            <tr>
+                                <td>{{ p.codigo }}</td>
+                                    <td>${{ p.preciounitario }}</td>
+                                    <td>{{ p.marca }}</td>
+                                    <td>{{ p.cantidad }}</td>
+                                    <td>{{ p.fechaelaboracion|default_if_none:"N/A" }}</td>
+                                    <td>{{ p.fechavencimiento|default_if_none:"N/A" }}</td>
+                                    <td>{{ p.descripcion|default_if_none:"Sin descripción" }}</td>
+                                    <td>{{ p.deleted_at|date:"Y-m-d H:i" }}</td>
+                                <td>
+                                    <!-- Botón que abre el modal de restauración vía AJAX -->
+                                    <button type="button" class="btn btn-sm btn-success btnRestaurar" data-url="{% url 'restaurar_prod' p.pk %}">
+                                        Restaurar
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar producto -->
+<div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarProductoLabel">Modificar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Aquí se cargará el formulario dinámicamente -->
+                <div id="formularioEditarProducto">
+                    <p class="text-muted">Cargando formulario...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para eliminar producto -->
+<div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-labelledby="modalEliminarProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEliminarProductoLabel">Borrar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="formularioEliminarProducto">
+                    <p class="text-muted">Cargando...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar nuevo producto -->
+<div class="modal fade" id="modalCrearProducto" tabindex="-1" aria-labelledby="modalCrearProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ingreso de un nuevo producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="formularioCrearProducto">
+                <p class="text-muted">Cargando formulario...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para restaurar producto -->
+<div class="modal fade" id="modalRestaurarProducto" tabindex="-1" aria-labelledby="modalRestaurarProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRestaurarProductoLabel">Reestablecer producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="formularioRestaurarProducto">
+                <p class="text-muted">Cargando...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/datatables@1.10.18/media/js/jquery.dataTables.min.js"></script>
+<script src="{% static 'tabla.js' %}"></script>
+
+<script>
+$(document).ready(function () { // función jQuery
+    $('#tabla_disponibles').DataTable(); // selecciona el elemento con id tabla_disponibles usando jQuery para transformar una tabla normal en DataTable
+    $('#tabla_eliminados').DataTable(); // selecciona el elemento con id tabla_eliminados usando jQuery para transformar una tabla normal en DataTable
+
+    // Al hacer clic en el botón Editar
+    $('.btnEditar').on('click', function() { // $('.btnEliminar') selecciona todos los elementos HTML que tienen la clase btnEliminar. Luego .on('click', function (){... establece un manejador de evento que se ejecutará cuando se haga click en cualquiera de esos elementos. 
+        var url = $(this).data('url'); // $(this) hace referencia al botón que fue cliqueado, y .data('url') obtiene el atributo data-url del botón
+        $.ajax({ // se inicia una petición AJAX con jQuery
+            url: url, // se utiliza la url obtenida del atributo data-url
+            type: 'GET', // método de solicitud HTTP  
+            // si la solicitud AJAX fue exitosa...
+            success: function(data) { // data contiene contenido HTML devuelto por el servidor
+                $('#formularioEditarProducto').html(data); // se carga contenido HTML que contiene data en #formularioEditarProducto
+                $('#modalEditarProducto').modal('show'); // se muestran los datos para la edición en un modal
+            }, // cierre success
+            // si la solicitud AJAX falla...
+            error: function(xhr, status, error) { // si la url está mal escrita o el servidor no responde
+                alert('Error al cargar el formulario.'); // muestra un mensaje alert al usuario
+            } // cierre error
+        }); // cierre AJAX
+    }); // cierre de la función del evento 'click'
+
+    // Para enviar el formulario por AJAX
+    $('#formularioEditarProducto').on('submit', 'form', function(e) { // se selecciona el contenedor con id formularioEditarProducto para establecer lo que se hace (function(e), siendo e un evento) cuando se envían ('submit') datos de un formulario ('form')
+        e.preventDefault(); // para enviar de forma asincrónica
+        var form = $(this); // se guarda una referencia al formulario enviado
+        var url = form.attr('action'); // se guarda en url la URL definida en el atributo action del formular, que establece a dónde se debe enviar la información
+        var data = form.serialize(); // convierte todos los campos del formulario en una cadena de texte. Ej: "nombre=Juan&&edad=20"
+        $.ajax({ // inicio de una solicitud AJAX
+            url: url, // url del formulario
+            type: 'POST', // método de envío de datos HTTP
+            data: data, // cadena de caracteres
+            // si la solicitud AJAX fue exitosa...
+            success: function(response) {  
+                if (response.success) { // se espera una respuesta en formato JSON por parte del servidor
+                    $('#modalEditarProducto').modal('hide'); // se oculta el modal
+                    location.reload(); // para recargar la página y reflejar cambios
+                } else {
+                    alert('Corrige los errores en el formulario.'); // genera un alert con el mensaje 'Corrige los errores en el formulario.'
+                }
+            }, // cierre success
+            // si la solicitud AJAX fue errónea...
+            error: function() {
+                alert('Error al enviar el formulario.'); // muestra un mensaje alert al usuario
+            }
+        }); // cierre AJAX
+    }); // cierre de la función del evento 'submit'
+
+    // Al hacer clic en el botón Eliminar
+    $('.btnEliminar').on('click', function () {
+        const url = $(this).data('url');
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+                $('#formularioEliminarProducto').html(data);
+                $('#modalEliminarProducto').modal('show');
+            },
+            error: function () {
+                alert('No se pudo cargar el formulario de eliminación.');
+            }
+        });
+    });
+
+    // Enviar eliminación lógica por AJAX
+    $('#formularioEliminarProducto').on('submit', 'form', function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const url = form.attr('action');
+        const data = form.serialize();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                if (response.success) {
+                    $('#modalEliminarProducto').modal('hide');
+                    location.reload(); // Recargar para reflejar el cambio en la tabla
+                } else {
+                    alert('No se pudo eliminar el producto.');
+                }
+            },
+            error: function () {
+                alert('Error al intentar eliminar el producto.');
+            }
+        });
+    });
+
+    // Al hacer clic en el botón Nuevo producto
+    $('#btnNuevoProducto').on('click', function() {
+        $.ajax({
+            url: "{% url 'registrar_prod' %}",
+            type: 'GET',
+            success: function(data) {
+                $('#formularioCrearProducto').html(data);
+                $('#modalCrearProducto').modal('show');
+            },
+            error: function() {
+                alert('No se pudo cargar el formulario.');
+            }
+        });
+    });
+
+    // Enviar el formulario vía AJAX
+    $('#formularioCrearProducto').on('submit', '#formNuevoProducto', function(e) {
+        e.preventDefault();
+        let form = $(this);
+        let url = form.attr('action');
+        let data = form.serialize();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function(response) {
+                if (response.success) {
+                    $('#modalCrearProducto').modal('hide');
+                    location.reload();  // Opcional: recarga la página para mostrar el nuevo producto
+                } else {
+                    // Mostrar errores si los hay
+                    let errores = '';
+                    for (let campo in response.errors) {
+                        errores += `<p><strong>${campo}:</strong> ${response.errors[campo].join(', ')}</p>`;
+                    }
+                    $('#formularioCrearProducto').prepend(`<div class="alert alert-danger">${errores}</div>`);
+                }
+            },
+            error: function() {
+                alert('Error al intentar guardar el producto.');
+            }
+        });
+    });
+
+    // Al hacer clic en el botón Restaurar
+    $('.btnRestaurar').on('click', function () {
+        const url = $(this).data('url');
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+                $('#formularioRestaurarProducto').html(data);
+                $('#modalRestaurarProducto').modal('show');
+            },
+            error: function () {
+                alert('No se pudo cargar el formulario de restauración.');
+            }
+        });
+    });
+
+    // Enviar formulario de restauración vía AJAX
+    $('#formularioRestaurarProducto').on('submit', '#formRestaurarProducto', function (e) {
+        e.preventDefault();
+        const form = $(this);
+        const url = form.attr('action');
+        const data = form.serialize();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                if (response.success) {
+                    $('#modalRestaurarProducto').modal('hide');
+                    location.reload();
+                } else {
+                    alert('No se pudo restaurar el producto.');
+                }
+            },
+            error: function () {
+                alert('Error al intentar restaurar el producto.');
+            }
+        });
+    });
+    
+});
+</script>
+{% endblock %}
