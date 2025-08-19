@@ -3,6 +3,11 @@ from productos.models import Productos
 from .forms import ProductForm
 from django.http import JsonResponse # necesario para trabajar con AJAX
 
+# /*para el reporte*/
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+
 def listar_productos(request): # request quiere decir solicitado
     # Muestra la lista de productos disponibles y eliminados.
     productos_disponibles = Productos.objects.all() # el objeto productos_disponibles recibe todos los atributos que tiene la clase Productos del models.py de la app productos excluyendo los eliminados lógicamente.
@@ -103,3 +108,16 @@ def restaurar_producto(request, pk): # pk será el valor a buscar para la elimin
 #         # Se podría agregar el mensaje: messages.success(request, f'Producto {producto.codigo} restaurado.')
 #         return redirect('listar_prod') # redirecciona al listar_productos.html (Aquí se podría mostrar un mensaje de restauración correcta)
 #     return redirect('listar_prod') # redirecciona al listar_productos.html 
+
+# vista para generar pdf
+def reporte_producto_pdf(request):
+    datos = Productos.objects.all() # Productos es el models utilizado para este reporte.
+    lista = [[obj.marca, obj.descripcion] for obj in datos]  # Ajustar campos de acuerdo al models que se utiliza.
+    encabezados = ["Marca", "Descripción"] # Aquí se eligen cómo se mostrarán los encabezados de la tabla del reporte.
+    template = get_template("productos/reporte_productos.html") # Dentro de templates/productos se encuentra reporte_productos.html para ser utilizado y generar el reporte.
+    context = {"titulo": "Mi Reporte", "datos": lista, "encabezados": encabezados}
+    html = template.render(context) # El template es renderizado con lo que contenga context, en la variable html
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = "inline; filename=reporte.pdf"
+    pisa.CreatePDF(html, dest=response) # Se crea el pdf en base al contenido de la variable html
+    return response

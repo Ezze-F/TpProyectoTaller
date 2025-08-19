@@ -346,3 +346,22 @@ nav.navbar {
     z-index: 1050; /* para que quede sobre otros elementos */
     width: 100vw;
 }
+
+.btn-reporte-prod {
+    background-color: #007bff; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de la fuente */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  /* Transición suave para los efectos */
+  transition: background-color 0.3s ease;
+}
+
+.btn-reporte-prod:hover {
+    background-color: #0056b3; /* Un azul más oscuro */
+}
