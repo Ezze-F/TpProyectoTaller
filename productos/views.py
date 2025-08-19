@@ -109,13 +109,15 @@ def restaurar_producto(request, pk): # pk será el valor a buscar para la elimin
 #         return redirect('listar_prod') # redirecciona al listar_productos.html (Aquí se podría mostrar un mensaje de restauración correcta)
 #     return redirect('listar_prod') # redirecciona al listar_productos.html 
 
-# vista para generar pdf
+# vista para generar el pdf de un reporte
 def reporte_producto_pdf(request):
+    #datos = Productos.objects.filter(is_delete=True) no funciona para imprimir el reporte de los productos eliminados
+    #datos = Productos.objects.filter(is_delete=False) si funciona para imprimir el reporte de los productos sin eliminar
     datos = Productos.objects.all() # Productos es el models utilizado para este reporte.
-    lista = [[obj.marca, obj.descripcion] for obj in datos]  # Ajustar campos de acuerdo al models que se utiliza.
-    encabezados = ["Marca", "Descripción"] # Aquí se eligen cómo se mostrarán los encabezados de la tabla del reporte.
+    lista = [[obj.marca, obj.descripcion, obj.fechaelaboracion, obj.fechavencimiento] for obj in datos]  # Ajustar campos de acuerdo al models que se utiliza.
+    encabezados = ["Marca", "Descripción", "Elaboración", "Vencimiento"] # Aquí se eligen cómo se mostrarán los encabezados de la tabla del reporte.
     template = get_template("productos/reporte_productos.html") # Dentro de templates/productos se encuentra reporte_productos.html para ser utilizado y generar el reporte.
-    context = {"titulo": "Mi Reporte", "datos": lista, "encabezados": encabezados}
+    context = {"titulo": "Productos", "datos": lista, "encabezados": encabezados}
     html = template.render(context) # El template es renderizado con lo que contenga context, en la variable html
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = "inline; filename=reporte.pdf"
